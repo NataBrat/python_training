@@ -69,7 +69,11 @@ class ContactHelper:
         wd = self.app.wd
         self.open_homepage()
         contacts = []
-        for element in wd.find_elements_by_name("entry"):
-            id = element.find_element_by_xpath("//input").get_attribute("value")
-            contacts.append(Contact(id=id))
+        index = 0
+        for element in wd.find_elements_by_css_selector("td.center"):
+            if element.find_elements_by_name("selected[]") and element.find_elements_by_name("selected[]")[0].is_displayed():
+                text = wd.find_element_by_xpath(f"//table[@id='maintable']/tbody/tr[{index + 2}]/td[3]").text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                contacts.append(Contact(firstname=text, id=id))
+                index += 1
         return contacts
