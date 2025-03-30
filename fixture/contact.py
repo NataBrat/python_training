@@ -16,6 +16,7 @@ class ContactHelper:
         self.select_first_contact()
         #  submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
+        self.contact_cache = None
 
     def select_first_contact(self):
         wd = self.app.wd
@@ -31,6 +32,7 @@ class ContactHelper:
         # submit modification
         wd.find_element_by_name("update").click()
         self.return_to_home_page()
+        self.contact_cache = None
 
     def create(self, contact):
         wd = self.app.wd
@@ -38,6 +40,7 @@ class ContactHelper:
         self.fill_contact_form(contact)
         wd.find_element_by_xpath("//div[@id='content']/form/input[20]").click()
         self.return_to_home_page()
+        self.contact_cache = None
 
     def fill_contact_form(self, contact):
         wd = self.app.wd
@@ -64,16 +67,20 @@ class ContactHelper:
         wd = self.app.wd
         if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_xpath("//input[@value='Send e-Mail']")) > 0):
             wd.find_element_by_link_text("home").click()
+            self.contact_cache = None
+
+    contact_cache = None
 
     def get_contact_list(self):
-        wd = self.app.wd
-        self.open_homepage()
-        contacts = []
-        index = 0
-        for element in wd.find_elements_by_css_selector("td.center"):
-            if element.find_elements_by_name("selected[]") and element.find_elements_by_name("selected[]")[0].is_displayed():
-                text = wd.find_element_by_xpath(f"//table[@id='maintable']/tbody/tr[{index + 2}]/td[3]").text
-                id = element.find_element_by_name("selected[]").get_attribute("value")
-                contacts.append(Contact(firstname=text, id=id))
-                index += 1
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_homepage()
+            self.contact_cache = []
+            index = 0
+            for element in wd.find_elements_by_css_selector("td.center"):
+                if element.find_elements_by_name("selected[]") and element.find_elements_by_name("selected[]")[0].is_displayed():
+                    text = wd.find_element_by_xpath(f"//table[@id='maintable']/tbody/tr[{index + 2}]/td[3]").text
+                    id = element.find_element_by_name("selected[]").get_attribute("value")
+                    self.contact_cache.append(Contact(firstname=text, id=id))
+                    index += 1
+        return list(self.contact_cache)
