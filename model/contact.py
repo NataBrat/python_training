@@ -5,11 +5,14 @@ class Contact:
 
     id_or_max = None
 
-    def __init__(self, firstname=None, lastname=None, address=None, home_phone=None, email=None, id=None):
+    def __init__(self, firstname=None, lastname=None, address=None, home=None, mobile = None, work = None, fax = None, email=None, id=None):
         self.firstname = firstname
         self.lastname = lastname
         self.address = address
-        self.home_phone = home_phone
+        self.home = home
+        self.mobile = mobile
+        self.work = work
+        self.fax = fax
         self.email = email
         self.id = id
 

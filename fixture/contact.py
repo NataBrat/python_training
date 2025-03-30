@@ -60,7 +60,10 @@ class ContactHelper:
         self.change_field_value("firstname", contact.firstname)
         self.change_field_value("lastname", contact.lastname)
         self.change_field_value("address", contact.address)
-        self.change_field_value("home", contact.home_phone)
+        self.change_field_value("home", contact.home)
+        self.change_field_value("mobile", contact.mobile)
+        self.change_field_value("work", contact.work)
+        self.change_field_value("fax", contact.fax)
         self.change_field_value("email", contact.email)
 
 
@@ -92,8 +95,9 @@ class ContactHelper:
             index = 0
             for element in wd.find_elements_by_css_selector("td.center"):
                 if element.find_elements_by_name("selected[]") and element.find_elements_by_name("selected[]")[0].is_displayed():
-                    text = wd.find_element_by_xpath(f"//table[@id='maintable']/tbody/tr[{index + 2}]/td[3]").text
                     id = element.find_element_by_name("selected[]").get_attribute("value")
-                    self.contact_cache.append(Contact(firstname=text, id=id))
+                    firstname = wd.find_element_by_xpath(f"//table[@id='maintable']/tbody/tr[{index + 2}]/td[3]").text
+                    lastname = wd.find_element_by_xpath(f"//table[@id='maintable']/tbody/tr[{index + 2}]/td[2]").text
+                    self.contact_cache.append(Contact(id=id, firstname=firstname, lastname=lastname))
                     index += 1
         return list(self.contact_cache)
