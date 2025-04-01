@@ -5,15 +5,16 @@ class Contact:
 
     id_or_max = None
 
-    def __init__(self, firstname=None, lastname=None, address=None, home=None, mobile = None, work = None, fax = None, email=None, id=None):
+    def __init__(self, firstname=None, lastname=None, address=None, home=None, mobile = None, work = None, email1=None, email2=None, email3=None, id=None):
         self.firstname = firstname
         self.lastname = lastname
         self.address = address
         self.home = home
         self.mobile = mobile
         self.work = work
-        self.fax = fax
-        self.email = email
+        self.email1 = email1
+        self.email2 = email2
+        self.email3 = email3
         self.id = id
 
     def __repr__(self):
